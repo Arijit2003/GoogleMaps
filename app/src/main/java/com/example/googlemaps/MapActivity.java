@@ -1,9 +1,13 @@
 package com.example.googlemaps;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,6 +22,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.googlemaps.databinding.ActivityMapBinding;
 import com.google.android.gms.maps.model.PolygonOptions;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -59,6 +65,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 .strokeColor(Color.parseColor("#000000"))
                 .strokeWidth(1));
 
+
         mMap.addPolygon(new PolygonOptions().add(
                 new LatLng(23.223659, 88.363074),
                 new LatLng(23.073265, 76.859305)
@@ -71,6 +78,20 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 .position(home,350f,350f)
                 .image(BitmapDescriptorFactory.fromResource(R.drawable.android))
                 .clickable(true));
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(@NonNull LatLng latLng) {
+                mMap.addMarker(new MarkerOptions().position(latLng).title("Clicked here"));
+                Geocoder geocoder = new Geocoder(MapActivity.this);
+                try {
+                    ArrayList<Address> arrAdd=(ArrayList<Address>) geocoder.getFromLocation(latLng.latitude,latLng.longitude,1);
+                    Toast.makeText(MapActivity.this, arrAdd.get(0).getAddressLine(0), Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
 
 
 
