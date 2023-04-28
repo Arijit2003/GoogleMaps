@@ -2,15 +2,23 @@ package com.example.googlemaps;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.googlemaps.databinding.ActivityMapBinding;
+import com.google.android.gms.maps.model.PolygonOptions;
+
+import java.util.Objects;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -42,8 +50,29 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         mMap.addMarker(new MarkerOptions().position(edu).title("VIT BHOPAL Boys Hostel 3"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(home));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(edu));
-//        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(home,16f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(home,14f));
 //        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(edu,16f));
+        mMap.addCircle(new CircleOptions().
+                center(home)
+                .radius(800)
+                .fillColor(Color.parseColor("#E2D0FC"))
+                .strokeColor(Color.parseColor("#000000"))
+                .strokeWidth(1));
+
+        mMap.addPolygon(new PolygonOptions().add(
+                new LatLng(23.223659, 88.363074),
+                new LatLng(23.073265, 76.859305)
+        )
+                .fillColor(Color.parseColor("#FFF8D6"))
+                .strokeColor(Color.parseColor("#212A3E")));
+
+        //GroundOverlay
+        mMap.addGroundOverlay(new GroundOverlayOptions()
+                .position(home,350f,350f)
+                .image(BitmapDescriptorFactory.fromResource(R.drawable.android))
+                .clickable(true));
+
+
 
     }
 }
